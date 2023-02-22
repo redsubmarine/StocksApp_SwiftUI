@@ -1,13 +1,14 @@
 //
-//  ContentView.swift
+//  MainListView.swift
 //  StocksApp
 //
 //  Created by 레드 on 2023/02/22.
 //
 
 import SwiftUI
+import StocksAPI
 
-struct ContentView: View {
+struct MainListView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -19,8 +20,8 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainListView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        MainListView()
     }
 }
