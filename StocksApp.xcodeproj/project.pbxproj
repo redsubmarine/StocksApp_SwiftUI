@@ -14,6 +14,7 @@
 		9DD9E4DE29A649260026264D /* StocksAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E4DD29A649260026264D /* StocksAppTests.swift */; };
 		9DD9E4E829A649260026264D /* StocksAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E4E729A649260026264D /* StocksAppUITests.swift */; };
 		9DD9E4EA29A649260026264D /* StocksAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E4E929A649260026264D /* StocksAppUITestsLaunchTests.swift */; };
+		9DD9E4F829A649710026264D /* StocksAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 9DD9E4F729A649710026264D /* StocksAPI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DD9E4F829A649710026264D /* StocksAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +145,9 @@
 			dependencies = (
 			);
 			name = StocksApp;
+			packageProductDependencies = (
+				9DD9E4F729A649710026264D /* StocksAPI */,
+			);
 			productName = StocksApp;
 			productReference = 9DD9E4C929A649250026264D /* StocksApp.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +220,9 @@
 				Base,
 			);
 			mainGroup = 9DD9E4C029A649250026264D;
+			packageReferences = (
+				9DD9E4F629A649710026264D /* XCRemoteSwiftPackageReference "StocksAPI_SPM" */,
+			);
 			productRefGroup = 9DD9E4CA29A649250026264D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -583,6 +591,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9DD9E4F629A649710026264D /* XCRemoteSwiftPackageReference "StocksAPI_SPM" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:redsubmarine/StocksAPI_SPM.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9DD9E4F729A649710026264D /* StocksAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9DD9E4F629A649710026264D /* XCRemoteSwiftPackageReference "StocksAPI_SPM" */;
+			productName = StocksAPI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9DD9E4C129A649250026264D /* Project object */;
 }
