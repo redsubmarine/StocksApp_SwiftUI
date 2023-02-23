@@ -27,6 +27,10 @@ struct MainListView: View {
             .refreshable {
                 await quotesViewModel.fetchQuotes(tickers: appViewModel.tickers)
             }
+            .sheet(item: $appViewModel.selectedTicker) {
+                StockTickerView(quoteViewModel: .init(ticker: $0, stocksAPI: quotesViewModel.stocksAPI))
+                    .presentationDetents([.height(560)])
+            }
             .task(id: appViewModel.tickers) {
                 await quotesViewModel.fetchQuotes(tickers: appViewModel.tickers)
             }
@@ -38,7 +42,7 @@ struct MainListView: View {
                 TickerListRowView(data: .init(symbol: ticker.symbol, name: ticker.shortname, price: quotesViewModel.priceForTicker(ticker), type: .main))
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        
+                        appViewModel.selectedTicker = ticker
                     }
             }
             .onDelete { appViewModel.removeTickers(atOffsets: $0) }

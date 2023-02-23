@@ -30,10 +30,12 @@ struct SearchView: View {
                         )
                     )
             )
-//            .contentShape(Rectangle())
-//            .onTapGesture { }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                appViewModel.selectedTicker = ticker
+            }
         }
-        .background(.white)
+        .background(Color(uiColor: .systemBackground))
         .listStyle(.plain)
         .refreshable {
             await quotesViewModel.fetchQuotes(tickers: searchViewModel.tickers)

@@ -11,7 +11,7 @@ import StocksAPI
 @MainActor
 class QuotesViewModel: ObservableObject {
     @Published var quotesDict: [String: Quote] = [:]
-    private let stocksAPI: AppStocksAPI
+    let stocksAPI: AppStocksAPI
     
     init(stocksAPI: AppStocksAPI = StocksAPI()) {
         self.stocksAPI = stocksAPI

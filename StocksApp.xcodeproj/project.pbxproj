@@ -32,6 +32,12 @@
 		9DD9E52329A70AE20026264D /* MockStubsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E52229A70AE20026264D /* MockStubsAPI.swift */; };
 		9DD9E52529A72F0D0026264D /* TickerListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E52429A72F0D0026264D /* TickerListRepository.swift */; };
 		9DD9E52729A7307A0026264D /* MockTickerListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E52629A7307A0026264D /* MockTickerListRepository.swift */; };
+		9DD9E52A29A73B1B0026264D /* StockTickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E52929A73B1B0026264D /* StockTickerView.swift */; };
+		9DD9E52C29A73B3D0026264D /* TickerQuoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E52B29A73B3D0026264D /* TickerQuoteViewModel.swift */; };
+		9DD9E52E29A749B60026264D /* DateRangePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E52D29A749B60026264D /* DateRangePickerView.swift */; };
+		9DD9E53029A74A680026264D /* ChartRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E52F29A74A680026264D /* ChartRange+Extensions.swift */; };
+		9DD9E53229A74EA10026264D /* QuoteDetailsRowColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E53129A74EA10026264D /* QuoteDetailsRowColumnView.swift */; };
+		9DD9E53429A74FF30026264D /* Foundation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9E53329A74FF30026264D /* Foundation+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +85,12 @@
 		9DD9E52229A70AE20026264D /* MockStubsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStubsAPI.swift; sourceTree = "<group>"; };
 		9DD9E52429A72F0D0026264D /* TickerListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerListRepository.swift; sourceTree = "<group>"; };
 		9DD9E52629A7307A0026264D /* MockTickerListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTickerListRepository.swift; sourceTree = "<group>"; };
+		9DD9E52929A73B1B0026264D /* StockTickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockTickerView.swift; sourceTree = "<group>"; };
+		9DD9E52B29A73B3D0026264D /* TickerQuoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerQuoteViewModel.swift; sourceTree = "<group>"; };
+		9DD9E52D29A749B60026264D /* DateRangePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePickerView.swift; sourceTree = "<group>"; };
+		9DD9E52F29A74A680026264D /* ChartRange+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChartRange+Extensions.swift"; sourceTree = "<group>"; };
+		9DD9E53129A74EA10026264D /* QuoteDetailsRowColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteDetailsRowColumnView.swift; sourceTree = "<group>"; };
+		9DD9E53329A74FF30026264D /* Foundation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Foundation+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +193,7 @@
 		9DD9E4FC29A65FCD0026264D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9DD9E52829A73B0C0026264D /* Stock Ticker Sheet Views */,
 				9DD9E4FF29A663600026264D /* Common */,
 				9DD9E4CE29A649250026264D /* MainListView.swift */,
 				9DD9E4FD29A65FD60026264D /* TickerListRowView.swift */,
@@ -205,6 +218,7 @@
 				9DD9E50729A664CD0026264D /* AppViewModel.swift */,
 				9DD9E50C29A665AB0026264D /* QuotesViewModel.swift */,
 				9DD9E51B29A66E8B0026264D /* SearchViewModel.swift */,
+				9DD9E52B29A73B3D0026264D /* TickerQuoteViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -223,6 +237,8 @@
 			isa = PBXGroup;
 			children = (
 				9DD9E51129A6669C0026264D /* Quote+Extensions.swift */,
+				9DD9E52F29A74A680026264D /* ChartRange+Extensions.swift */,
+				9DD9E53329A74FF30026264D /* Foundation+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -234,6 +250,16 @@
 				9DD9E52429A72F0D0026264D /* TickerListRepository.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		9DD9E52829A73B0C0026264D /* Stock Ticker Sheet Views */ = {
+			isa = PBXGroup;
+			children = (
+				9DD9E52929A73B1B0026264D /* StockTickerView.swift */,
+				9DD9E52D29A749B60026264D /* DateRangePickerView.swift */,
+				9DD9E53129A74EA10026264D /* QuoteDetailsRowColumnView.swift */,
+			);
+			path = "Stock Ticker Sheet Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -373,13 +399,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				9DD9E50B29A665290026264D /* Stubs.swift in Sources */,
+				9DD9E52A29A73B1B0026264D /* StockTickerView.swift in Sources */,
 				9DD9E50529A664960026264D /* LoadingStateView.swift in Sources */,
+				9DD9E53429A74FF30026264D /* Foundation+Extensions.swift in Sources */,
 				9DD9E51A29A66E330026264D /* FetchPhase.swift in Sources */,
+				9DD9E53029A74A680026264D /* ChartRange+Extensions.swift in Sources */,
 				9DD9E4CF29A649250026264D /* MainListView.swift in Sources */,
 				9DD9E50D29A665AB0026264D /* QuotesViewModel.swift in Sources */,
+				9DD9E53229A74EA10026264D /* QuoteDetailsRowColumnView.swift in Sources */,
+				9DD9E52C29A73B3D0026264D /* TickerQuoteViewModel.swift in Sources */,
 				9DD9E50829A664CD0026264D /* AppViewModel.swift in Sources */,
 				9DD9E4CD29A649250026264D /* StocksApp.swift in Sources */,
 				9DD9E52529A72F0D0026264D /* TickerListRepository.swift in Sources */,
+				9DD9E52E29A749B60026264D /* DateRangePickerView.swift in Sources */,
 				9DD9E50129A663690026264D /* EmptyStateView.swift in Sources */,
 				9DD9E51C29A66E8B0026264D /* SearchViewModel.swift in Sources */,
 				9DD9E50F29A665F60026264D /* Utils.swift in Sources */,

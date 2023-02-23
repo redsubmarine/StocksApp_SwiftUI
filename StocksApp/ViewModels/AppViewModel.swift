@@ -14,6 +14,8 @@ class AppViewModel: ObservableObject {
         didSet { saveTickers() }
     }
     
+    @Published var selectedTicker: Ticker?
+    
     var titleText = "Stocks"
     @Published var subtitleText: String
     var emptyTickersText = "Search & add symbol to see stock quotes"

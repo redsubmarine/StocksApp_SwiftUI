@@ -59,7 +59,6 @@ class SearchViewModel: ObservableObject {
         
         do {
             let tickers = try await stocksAPI.searchTickers(query: searchQuery, isEquityTypeOnly: true)
-            print("------------", tickers.count)
             if searchQuery != trimmedQuery { return }
             if tickers.isEmpty {
                 phase = .empty
