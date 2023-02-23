@@ -10,7 +10,9 @@ import StocksAPI
 
 @MainActor
 class AppViewModel: ObservableObject {
-    @Published var tickers: [Ticker] = []
+    @Published var tickers: [Ticker] = [] {
+        didSet { saveTickers() }
+    }
     
     var titleText = "Stocks"
     @Published var subtitleText: String
@@ -23,8 +25,35 @@ class AppViewModel: ObservableObject {
         return formatter
     }()
     
-    init() {
+    let tickerListRepository: TickerListRepository
+    
+    init(repository: TickerListRepository = TickerPlistRepository()) {
+        tickerListRepository = repository
         subtitleText = subtitleDateFormatter.string(from: Date())
+        loadTickers()
+    }
+    
+    private func loadTickers() {
+        Task { [weak self] in
+            guard let s = self else { return }
+            do {
+                s.tickers = try await tickerListRepository.load()
+            } catch {
+                print(error.localizedDescription)
+                s.tickers = []
+            }
+        }
+    }
+    
+    private func saveTickers() {
+        Task { [weak self] in
+            guard let s = self else { return }
+            do {
+                try await tickerListRepository.save(s.tickers)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func removeTickers(atOffsets offsets: IndexSet) {

@@ -22,14 +22,25 @@ struct SearchView: View {
                         price: quotesViewModel.priceForTicker(ticker),
                         type: .search(
                             isSaved: appViewModel.isAddedToMyTickers(ticker: ticker),
-                            onButtonTapped: { appViewModel.toggleTicker(ticker) }
+                            onButtonTapped: {
+                                Task { @MainActor in
+                                    appViewModel.toggleTicker(ticker)
+                                }
+                            }
                         )
                     )
             )
-            .contentShape(Rectangle())
-            .onTapGesture { }
+//            .contentShape(Rectangle())
+//            .onTapGesture { }
         }
+        .background(.white)
         .listStyle(.plain)
+        .refreshable {
+            await quotesViewModel.fetchQuotes(tickers: searchViewModel.tickers)
+        }
+        .task(id: searchViewModel.tickers, {
+            await quotesViewModel.fetchQuotes(tickers: searchViewModel.tickers)
+        })
         .overlay {
             listSearchOveray
         }
@@ -39,7 +50,11 @@ struct SearchView: View {
     private var listSearchOveray: some View {
         switch searchViewModel.phase {
         case let .failure(error):
-            ErrorStateView(error: error.localizedDescription) {}
+            ErrorStateView(error: error.localizedDescription) {
+                Task {
+                    await searchViewModel.searchTickers()
+                }
+            }
         case .empty:
             EmptyStateView(text: searchViewModel.emptyListText)
         case .fetching:
@@ -53,40 +68,48 @@ struct SearchView: View {
 struct SearchView_Previews: PreviewProvider {
     
     @StateObject static var stubbedSearchViewModel: SearchViewModel = {
-        let viewModel = SearchViewModel()
-        viewModel.phase = .success(Ticker.stubs)
-        return viewModel
+        var mock = MockStocksAPI()
+        mock.stubbedSearchTickersCallback = {
+            Ticker.stubs
+        }
+        return SearchViewModel(query: "Apple", stocksAPI: mock)
     }()
     
     @StateObject static var emptySearchViewModel: SearchViewModel = {
-        let viewModel = SearchViewModel()
-        viewModel.query = "Theranos"
-        viewModel.phase = .empty
-        return viewModel
+        var mock = MockStocksAPI()
+        mock.stubbedSearchTickersCallback = {
+            []
+        }
+        return SearchViewModel(query: "Theranos", stocksAPI: mock)
     }()
     
     @StateObject static var loadingSearchViewModel: SearchViewModel = {
-        let viewModel = SearchViewModel()
-        viewModel.phase = .fetching
-        return viewModel
+        var mock = MockStocksAPI()
+        mock.stubbedSearchTickersCallback = {
+            await withCheckedContinuation { _ in }
+        }
+        return SearchViewModel(query: "Apple", stocksAPI: mock)
     }()
     
     @StateObject static var errorSearchViewModel: SearchViewModel = {
-        let viewModel = SearchViewModel()
-        viewModel.phase = .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "An Error has been occured"]))
-        return viewModel
+        var mock = MockStocksAPI()
+        mock.stubbedSearchTickersCallback = { throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "An Error has been occured"]) }
+
+        return SearchViewModel(query: "Apple", stocksAPI: mock)
     }()
     
     @StateObject static var appViewModel: AppViewModel = {
-        let viewModel = AppViewModel()
-        viewModel.tickers = Array(Ticker.stubs.prefix(upTo: 2))
+        var mock = MockTickerListRepository()
+        mock.stubbedLoad = { Array(Ticker.stubs.prefix(upTo: 2)) }
+        let viewModel = AppViewModel(repository: mock)
+        
         return viewModel
     }()
     
     static var quotesViewModel: QuotesViewModel = {
-        let viewModel = QuotesViewModel()
-        viewModel.quotesDict = Quote.stubsDict
-        return viewModel
+        var mock = MockStocksAPI()
+        mock.stubbedFetchQuotesCallback = { Quote.stubs }
+        return QuotesViewModel(stocksAPI: mock)
     }()
     
     static var previews: some View {

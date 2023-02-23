@@ -11,7 +11,7 @@ import StocksAPI
 
 @MainActor
 class SearchViewModel: ObservableObject {
-    @Published var query = ""
+    @Published var query: String
     @Published var phase: FetchPhase<[Ticker]> = .initial
     
     private var trimmedQuery: String {
@@ -24,5 +24,52 @@ class SearchViewModel: ObservableObject {
     
     var emptyListText: String {
         "Symbols not found for\n\"\(query)\""
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
+    private let stocksAPI: AppStocksAPI
+    
+    init(query: String = "", stocksAPI: AppStocksAPI = StocksAPI()) {
+        self.query = query
+        self.stocksAPI = stocksAPI
+        
+        startObserving()
+    }
+    
+    private func startObserving() {
+        $query.debounce(for: 0.25, scheduler: DispatchQueue.main)
+            .sink { _ in
+                Task { [weak self] in
+                    await self?.searchTickers()
+                }
+            }
+            .store(in: &cancellables)
+        
+        $query.filter({ $0.isEmpty })
+            .sink { [weak self] _ in
+                self?.phase = .initial
+            }
+            .store(in: &cancellables)
+    }
+    
+    func searchTickers() async {
+        let searchQuery = trimmedQuery
+        guard !searchQuery.isEmpty else { return }
+        phase = .fetching
+        
+        do {
+            let tickers = try await stocksAPI.searchTickers(query: searchQuery, isEquityTypeOnly: true)
+            print("------------", tickers.count)
+            if searchQuery != trimmedQuery { return }
+            if tickers.isEmpty {
+                phase = .empty
+            } else {
+                phase = .success(tickers)
+            }
+        } catch {
+            if searchQuery != trimmedQuery { return }
+            print(error.localizedDescription)
+            phase = .failure(error)
+        }
     }
 }

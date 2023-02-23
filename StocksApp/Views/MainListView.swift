@@ -24,6 +24,12 @@ struct MainListView: View {
                 attributionToolbar
             }
             .searchable(text: $searchViewModel.query)
+            .refreshable {
+                await quotesViewModel.fetchQuotes(tickers: appViewModel.tickers)
+            }
+            .task(id: appViewModel.tickers) {
+                await quotesViewModel.fetchQuotes(tickers: appViewModel.tickers)
+            }
     }
     
     private var tickerListView: some View {
@@ -81,27 +87,31 @@ struct MainListView: View {
 
 struct MainListView_Previews: PreviewProvider {
     @StateObject static var appViewModel: AppViewModel = {
-       let viewModel = AppViewModel()
-        viewModel.tickers = Ticker.stubs
+        var mock = MockTickerListRepository()
+        mock.stubbedLoad = { Ticker.stubs }
+        let viewModel = AppViewModel(repository: mock)
+        
         return viewModel
     }()
     
     @StateObject static var emptyAppViewModel: AppViewModel = {
-       let viewModel = AppViewModel()
-        viewModel.tickers = []
+        var mock = MockTickerListRepository()
+        mock.stubbedLoad = { [] }
+        let viewModel = AppViewModel(repository: mock)
+        
         return viewModel
     }()
     
     static var quotesViewModel: QuotesViewModel = {
         let viewModel = QuotesViewModel()
-         viewModel.quotesDict = Quote.stubsDict
-         return viewModel
+        viewModel.quotesDict = Quote.stubsDict
+        return viewModel
     }()
     
     static var searchViewModel: SearchViewModel = {
-        let viewModel = SearchViewModel()
-        viewModel.phase = .success(Ticker.stubs)
-         return viewModel
+        var mock = MockStocksAPI()
+        mock.stubbedSearchTickersCallback = { Ticker.stubs }
+        return SearchViewModel(stocksAPI: mock)
     }()
     
     static var previews: some View {
