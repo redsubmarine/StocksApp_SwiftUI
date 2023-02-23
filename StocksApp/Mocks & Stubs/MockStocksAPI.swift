@@ -1,5 +1,5 @@
 //
-//  MockStubsAPI.swift
+//  MockStocksAPI.swift
 //  StocksApp
 //
 //  Created by 레드 on 2023/02/23.
@@ -19,6 +19,11 @@ struct MockStocksAPI: AppStocksAPI {
     var stubbedFetchQuotesCallback: (() async throws -> [Quote])!
     func fetchQuotes(symbols: String) async throws -> [Quote] {
         try await stubbedFetchQuotesCallback()
+    }
+    
+    var stubbedFetchChartDataCallback: ((ChartRange) async throws -> ChartData?)! = { $0.stubs }
+    func fetchChartData(symbol: String, range: ChartRange) async throws -> ChartData? {
+        try await stubbedFetchChartDataCallback(range)
     }
 }
 

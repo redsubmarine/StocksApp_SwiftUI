@@ -10,8 +10,8 @@ import StocksAPI
 
 struct StockTickerView: View {
     
+    @StateObject var chartViewModel: ChartViewModel
     @StateObject var quoteViewModel: TickerQuoteViewModel
-    @State var selectedRange = ChartRange.oneDay
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -27,8 +27,11 @@ struct StockTickerView: View {
         }
         .padding(.top)
         .background(Color(uiColor: .systemBackground))
-        .task {
-            await quoteViewModel.fetchQuotes()
+        .task(id: chartViewModel.selectedRange.rawValue) {
+            if quoteViewModel.quote == nil {
+                await quoteViewModel.fetchQuotes()
+            }
+            await chartViewModel.fetchData()
         }
     }
 
@@ -41,11 +44,19 @@ struct StockTickerView: View {
             
             Divider()
             
-            DateRangePickerView(selectedRange: $selectedRange)
+            ZStack {
+                DateRangePickerView(selectedRange: $chartViewModel.selectedRange)
+                    .opacity(chartViewModel.selectedXOpacity)
+                
+                Text(chartViewModel.selectedXDateText)
+                    .font(.headline)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal)
+            }
             
             Divider()
             
-            Text("Chart View Placeholder")
+            chartView
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, minHeight: 220)
             
@@ -60,6 +71,21 @@ struct StockTickerView: View {
     }
     
     @ViewBuilder
+    private var chartView: some View {
+        switch chartViewModel.fetchPhase {
+        case .fetching:
+            LoadingStateView()
+        case let .success(data):
+            ChartView(data: data, viewModel: chartViewModel)
+        case let .failure(error):
+            ErrorStateView(error: "Chart: \(error.localizedDescription)")
+                .padding(.horizontal)
+        default:
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
     private var quoteDetailRowView: some View {
         switch quoteViewModel.phase {
         case .fetching: LoadingStateView()
@@ -69,7 +95,7 @@ struct StockTickerView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(quote.columnItems) { item in
-                        QuoteDetailsRowColumnView(item: item)
+                        QuoteDetailRowColumnView(item: item)
                     }
                 }
                 .padding(.horizontal)
@@ -208,21 +234,25 @@ struct StockTickerView_Previews: PreviewProvider {
         return TickerQuoteViewModel(ticker: .stub, stocksAPI: mockAPI)
     }()
     
+    static var chartViewModel: ChartViewModel {
+        .init(ticker: .stub, apiService: MockStocksAPI())
+    }
+    
     static var previews: some View {
         Group {
-            StockTickerView(quoteViewModel: tradingStubsQuoteViewModel)
+            StockTickerView(chartViewModel: chartViewModel, quoteViewModel: tradingStubsQuoteViewModel)
                 .previewDisplayName("Trading")
                 .frame(height: 700)
             
-            StockTickerView(quoteViewModel: closedStubsQuoteViewModel)
+            StockTickerView(chartViewModel: chartViewModel, quoteViewModel: closedStubsQuoteViewModel)
                 .previewDisplayName("Closed")
                 .frame(height: 700)
             
-            StockTickerView(quoteViewModel: loadingStubsQuoteViewModel)
+            StockTickerView(chartViewModel: chartViewModel, quoteViewModel: loadingStubsQuoteViewModel)
                 .previewDisplayName("Loading")
                 .frame(height: 700)
             
-            StockTickerView(quoteViewModel: errorStubsQuoteViewModel)
+            StockTickerView(chartViewModel: chartViewModel, quoteViewModel: errorStubsQuoteViewModel)
                 .previewDisplayName("Error")
                 .frame(height: 700)
         }

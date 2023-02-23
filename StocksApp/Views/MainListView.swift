@@ -28,7 +28,7 @@ struct MainListView: View {
                 await quotesViewModel.fetchQuotes(tickers: appViewModel.tickers)
             }
             .sheet(item: $appViewModel.selectedTicker) {
-                StockTickerView(quoteViewModel: .init(ticker: $0, stocksAPI: quotesViewModel.stocksAPI))
+                StockTickerView(chartViewModel: ChartViewModel(ticker: $0, apiService: quotesViewModel.stocksAPI), quoteViewModel: .init(ticker: $0, stocksAPI: quotesViewModel.stocksAPI))
                     .presentationDetents([.height(560)])
             }
             .task(id: appViewModel.tickers) {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StocksAPI
 
 extension Double {
     //https://stackoverflow.com/questions/18267211/ios-convert-large-numbers-to-smaller-format
@@ -40,5 +41,28 @@ extension Double {
         numFormatter.decimalSeparator = ","
         
         return numFormatter.string(from: NSNumber (value:value))!
+    }
+}
+
+extension Double {
+    var roundedString: String {
+        String(format: "%.2f", self)
+    }
+}
+
+extension Date {
+    func dateComponents(timeZone: TimeZone, rangeType: ChartRange, calendar: Calendar = .current) -> DateComponents {
+        let current = calendar.dateComponents(in: timeZone, from: self)
+        var components = DateComponents(timeZone: timeZone, year: current.year, month: current.month)
+        
+        if rangeType == .oneMonth || rangeType == .oneWeek || rangeType == .oneDay {
+            components.day = current.day
+        }
+        
+        if rangeType == .oneDay {
+            components.hour = current.hour
+        }
+        
+        return components
     }
 }

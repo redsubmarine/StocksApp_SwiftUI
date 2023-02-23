@@ -1,5 +1,5 @@
 //
-//  QuoteDetailsRowColumnView.swift
+//  QuoteDetailRowColumnView.swift
 //  StocksApp
 //
 //  Created by 레드 on 2023/02/23.
@@ -18,7 +18,7 @@ struct QuoteDetailRowColumnItem: Identifiable {
     }
 }
 
-struct QuoteDetailsRowColumnView: View {
+struct QuoteDetailRowColumnView: View {
     let item: QuoteDetailRowColumnItem
     
     var body: some View {
@@ -38,7 +38,7 @@ struct QuoteDetailsRowColumnView: View {
 
 struct QuoteDetailsRowColumnView_Previews: PreviewProvider {
     static var previews: some View {
-        QuoteDetailsRowColumnView(item:
+        QuoteDetailRowColumnView(item:
                 .init(rows: [
                     .init(title: "Open", value: "164.23"),
                     .init(title: "Open", value: "164.23"),
