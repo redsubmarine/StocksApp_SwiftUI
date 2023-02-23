@@ -5,8 +5,7 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:redsubmarine/StocksAPI_SPM.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "77f83aa73696b75621b6f12d39268c451e81408b"
+        "revision" : "3ae2123ddbe8a83de68dae9e6f739da9a3473de0"
       }
     }
   ],

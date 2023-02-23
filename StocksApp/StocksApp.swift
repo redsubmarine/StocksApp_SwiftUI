@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
-import StocksAPI
 
 @main
 struct StocksApp: App {
-    let stocksAPI = StocksAPI()
+    @StateObject var appViewModel = AppViewModel()
     
     var body: some Scene {
         WindowGroup {
-            MainListView()
+            NavigationStack {
+                MainListView()
+            }
+            .environmentObject(appViewModel)
         }
+        
     }
 }
